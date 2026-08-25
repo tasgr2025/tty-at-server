@@ -111,25 +111,22 @@ bool parseAtCommand(const std::string& input, AtCommand& out) {
         return false;
     }
 
-    AtCommand cmd;
-    cmd.raw = line;
-
+    out.raw = line;
     std::string body = line.substr(2); // после "AT"
 
     if (body.empty()) {
-        cmd.prefix.clear();
-        cmd.name.clear();
-        cmd.type = AtCommandType::Basic;
-        out = cmd;
+        out.prefix.clear();
+        out.name.clear();
+        out.type = AtCommandType::Basic;
         return true;
     }
 
     char c0 = body[0];
     if (c0 == '+' || c0 == '&' || c0 == '%' || c0 == '*' || c0 == '#') {
-        cmd.prefix = std::string(1, c0);
+        out.prefix = std::string(1, c0);
         body = body.substr(1);
     } else {
-        cmd.prefix.clear();
+        out.prefix.clear();
     }
 
     if (body.empty()) {
@@ -141,32 +138,30 @@ bool parseAtCommand(const std::string& input, AtCommand& out) {
 
     // Нет ни '=', ни '?' — execute или basic
     if (eq == std::string::npos && q == std::string::npos) {
-        if (cmd.prefix.empty()) {
+        if (out.prefix.empty()) {
             // Базовая команда вида ATZ или ATE0
             size_t i = 0;
             while (i < body.size() && std::isalpha(static_cast<unsigned char>(body[i]))) {
                 ++i;
             }
 
-            cmd.name = ptrim(body.substr(0, i));
-            if (cmd.name.empty()) {
+            out.name = ptrim(body.substr(0, i));
+            if (out.name.empty()) {
                 return false;
             }
 
             if (i < body.size()) {
-                cmd.params.push_back(body.substr(i));
+                out.params.push_back(body.substr(i));
             }
-            cmd.type = AtCommandType::Basic;
+            out.type = AtCommandType::Basic;
         } else {
             // Расширенная команда без параметров: AT+CMD
-            cmd.name = ptrim(body);
-            if (cmd.name.empty()) {
+            out.name = ptrim(body);
+            if (out.name.empty()) {
                 return false;
             }
-            cmd.type = AtCommandType::Execute;
+            out.type = AtCommandType::Execute;
         }
-
-        out = cmd;
         return true;
     }
 
@@ -180,36 +175,35 @@ bool parseAtCommand(const std::string& input, AtCommand& out) {
         nameEnd = std::min(eq, q);
     }
 
-    cmd.name = ptrim(body.substr(0, nameEnd));
-    if (cmd.name.empty()) {
+    out.name = ptrim(body.substr(0, nameEnd));
+    if (out.name.empty()) {
         return false;
     }
 
     if (eq != std::string::npos && eq == nameEnd) {
         if (q != std::string::npos && q == eq + 1) {
             // AT+CMD=?
-            cmd.type = AtCommandType::Test;
+            out.type = AtCommandType::Test;
         } else if (q != std::string::npos && q != eq + 1) {
             // Некорректный формат
-            cmd.type = AtCommandType::Unknown;
+            out.type = AtCommandType::Unknown;
         } else {
             // AT+CMD=...
-            cmd.type = AtCommandType::Write;
-            cmd.params = splitParams(body.substr(eq + 1));
+            out.type = AtCommandType::Write;
+            out.params = splitParams(body.substr(eq + 1));
         }
     } else if (q != std::string::npos && q == nameEnd) {
         if (eq != std::string::npos) {
             // Некорректный формат вида AT+CMD?=...
-            cmd.type = AtCommandType::Unknown;
+            out.type = AtCommandType::Unknown;
         } else {
             // AT+CMD?
-            cmd.type = AtCommandType::Read;
+            out.type = AtCommandType::Read;
         }
     } else {
-        cmd.type = AtCommandType::Unknown;
+        out.type = AtCommandType::Unknown;
     }
 
-    out = cmd;
     return true;
 }
 

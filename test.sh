@@ -33,8 +33,13 @@ cleanup() {
 }
 trap cleanup EXIT
 
+if [ ! -f "${AT_SERVER}" ]; then
+    echo "Ошибка: проверяемый исполняемый файл ${AT_SERVER} не найден."
+    exit 1
+fi
 
 ./virtual-serial.sh start
+
 ${AT_SERVER} ${TTY_SERVER} ${DICT} &
 AT_SERVER_PID=$!
 

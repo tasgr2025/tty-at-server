@@ -2,3 +2,4 @@ atserver
 *.o
 .vscode
 /.idea/
+*.log

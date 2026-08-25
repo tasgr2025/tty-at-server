@@ -166,6 +166,7 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Не удаётся открыть \"%s\" для записи.\n", log_path);
         exit(1);
     }
+    fprintf(fl, "Журнал работы at-сервера\n");
     
     // Установить обработчики сигналов
     signal(SIGINT, signal_handler);
@@ -183,7 +184,7 @@ int main(int argc, char* argv[]) {
             perror("read");
             break;
         } else if (n == 0) {
-            // EOF, устройство закрыто
+            /* EOF, устройство закрыто */
             break;
         }
         
@@ -196,7 +197,7 @@ int main(int argc, char* argv[]) {
                     /* проверить на соответствие команды словарю */
                     if (matchPattern(entry.first, command)) {
                         string response = entry.second;
-                        // Отправить ответ + \r\n
+                        /* Отправить ответ + \r\n */
                         write(fd, response.c_str(), response.length());
                         write(fd, "\r\n", 2);
                         matched = true;
@@ -206,8 +207,11 @@ int main(int argc, char* argv[]) {
                             log_command_parse(fl, command_parsed);
                         }
                         else {
-                            fprintf(fl, "FAIL : %s\n", command);
+                            fprintf(fl, "FAIL : %s\n", command.c_str());
+                            matched = false;
                         }
+                        fflush(fl);
+                        break;
                     }
                 }
                 if (!matched) {
@@ -215,12 +219,14 @@ int main(int argc, char* argv[]) {
                 }
                 command.clear();
             }
-            // Если был \r, а следующий символ \n - он будет прочитан отдельно,
-            // но command будет пуст, поэтому ничего не делаем
+            /* Если был \r, а следующий символ \n - он будет прочитан отдельно,
+            но command будет пуст, поэтому ничего не делаем */
         } else {
             command.push_back(ch);
         }
     }
+    fprintf(fl, "Файл журнала закрыт\n");
+    fflush(fl);
     fclose(fl);
     close(fd);
     fprintf(stdout, "AT сервер остановлен\n");
