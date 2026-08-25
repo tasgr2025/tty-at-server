@@ -22,42 +22,6 @@ string trim(const string& str) {
     return str.substr(first, last - first + 1);
 }
 
-/*
-bool matchPattern(const char* pattern, const char* text) {
-    if (*pattern == '\0') return (*text == '\0');
-    
-    if (*pattern == '*') {
-        // * может "съесть" 0 или более символов
-        if (matchPattern(pattern + 1, text)) return true;
-        if (*text != '\0' && matchPattern(pattern, text + 1)) return true;
-        return false;
-    }
-    
-    if (*pattern == '.') {
-        if (*text == '\0') return false;
-        return matchPattern(pattern + 1, text + 1);
-    }
-    
-    if (*pattern == '[') {
-        // Найти закрывающую скобку
-        const char* end = strchr(pattern, ']');
-        if (!end) return false; // некорректный паттерн
-        if (*text == '\0') return false;
-        bool found = false;
-        for (const char* c = pattern + 1; c < end; ++c) {
-            if (*c == *text) { found = true; break; }
-        }
-        if (!found) return false;
-        return matchPattern(end + 1, text + 1);
-    }
-    
-    // Обычный символ
-    if (*text == '\0') return false;
-    if (*pattern != *text) return false;
-    return matchPattern(pattern + 1, text + 1);
-}
-*/
-
 
 bool matchPattern(const std::string& pattern, const std::string& str) {
     size_t pLen = pattern.size();
