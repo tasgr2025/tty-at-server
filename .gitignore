@@ -1,3 +1,4 @@
 atserver
 *.o
 .vscode
+/.idea/

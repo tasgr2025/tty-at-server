@@ -10,6 +10,5 @@ ATI=Manufacturer: Test, Model: Test, Revision: 1.0
 AT+COPS?=+COPS: 0,0,"TestNet",0
 AT+CPIN?=+CPIN: READY
 AT+CPIN=*=OK
-AT=OK
-A*B=OK
-DF.=OK
+AT*B=OK
+ATDF.=OK

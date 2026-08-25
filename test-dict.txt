@@ -1,4 +1,4 @@
-# test-dict.txt 
+# test-dict.txt
 # Здесь перечислены некоторые возможные команды и ответы на них
 # Ответ начинается после крайнего правого символа `=`.
 AT=OK
@@ -12,7 +12,9 @@ AT+CPIN=12=OK
 AT+CPIN=123=OK
 AT+CPIN=abcFGH=OK
 ABRACADBRA=ERROR
-A12345B=OK
-AzxB=OK
-DF1=OK
-DF12=ERROR
+ATBRACADBRA=ERROR
+AT12345B=OK
+ATB=OK
+ATzxB=OK
+ATDF1=OK
+ATDF12=ERROR

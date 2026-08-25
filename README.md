@@ -29,9 +29,9 @@
 ```bash
 $ ./test.sh
 Запускаем виртуальные последовательные порты...
-2026/08/25 13:13:57 socat[24881] N PTY is /dev/pts/3
-2026/08/25 13:13:57 socat[24881] N PTY is /dev/pts/4
-2026/08/25 13:13:57 socat[24881] N starting data transfer loop with FDs [5,5] and [7,7]
+2026/08/25 15:43:44 socat[36456] N PTY is /dev/pts/3
+2026/08/25 15:43:44 socat[36456] N PTY is /dev/pts/4
+2026/08/25 15:43:44 socat[36456] N starting data transfer loop with FDs [5,5] and [7,7]
 Виртуальные порты созданы:
   /tmp/ttyV0
   /tmp/ttyV1
@@ -53,21 +53,24 @@ AT сервер слушает на "/tmp/ttyV0" ...
 Тест 9: AT+CPIN=123 -> УСПЕШНО (ответ: OK)
 Тест 10: AT+CPIN=abcFGH -> УСПЕШНО (ответ: OK)
 Тест 11: ABRACADBRA -> УСПЕШНО (ответ: ERROR)
-Тест 12: A12345B -> УСПЕШНО (ответ: OK)
-Тест 13: AzxB -> УСПЕШНО (ответ: OK)
-Тест 14: DF1 -> УСПЕШНО (ответ: OK)
-Тест 15: DF12 -> УСПЕШНО (ответ: ERROR)
+Тест 12: ATBRACADBRA -> УСПЕШНО (ответ: ERROR)
+Тест 13: AT12345B -> УСПЕШНО (ответ: OK)
+Тест 14: ATB -> УСПЕШНО (ответ: OK)
+Тест 15: ATzxB -> УСПЕШНО (ответ: OK)
+Тест 16: ATDF1 -> УСПЕШНО (ответ: OK)
+Тест 17: ATDF12 -> УСПЕШНО (ответ: ERROR)
 
 Результаты
-Всего: 15, Пройдено: 15, Провалено: 0
+Всего: 17, Пройдено: 17, Провалено: 0
 ВСЕ ТЕСТЫ ПРОЙДЕНЫ
 Завершение ./atserver
-Останавливаем процесс socat (PID 24881)...
-2026/08/25 13:14:21 socat[24881] N socat_signal(): handling signal 15
-2026/08/25 13:14:21 socat[24881] W exiting on signal 15
-2026/08/25 13:14:21 socat[24881] N socat_signal(): finishing signal 15
-2026/08/25 13:14:21 socat[24881] N exit(143)
+Останавливаем процесс socat (PID 36456)...
+2026/08/25 15:44:12 socat[36456] N socat_signal(): handling signal 15
+2026/08/25 15:44:12 socat[36456] W exiting on signal 15
+2026/08/25 15:44:12 socat[36456] N socat_signal(): finishing signal 15
+2026/08/25 15:44:12 socat[36456] N exit(143)
 Виртуальные порты удалены.
-./test.sh: строка 134: 24883 Убито              ${AT_SERVER} ${TTY_SERVER} ${DICT}
+./test.sh: строка 134: 36461 Убито              ${AT_SERVER} ${TTY_SERVER} ${DICT}
+$ 
 ```
 
