@@ -1,0 +1,18 @@
+# test-dict.txt 
+# Здесь перечислены некоторые возможные команды и ответы на них
+# Ответ начинается после крайнего правого символа `=`.
+AT=OK
+ATE0=OK
+ATE1=OK
+ATI=Manufacturer: Test, Model: Test, Revision: 1.0
+AT+COPS?=+COPS: 0,0,"TestNet",0
+AT+CPIN?=+CPIN: READY
+AT+CPIN=1=OK
+AT+CPIN=12=OK
+AT+CPIN=123=OK
+AT+CPIN=abcFGH=OK
+ABRACADBRA=ERROR
+A12345B=OK
+AzxB=OK
+DF1=OK
+DF12=ERROR
