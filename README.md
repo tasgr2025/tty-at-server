@@ -32,9 +32,9 @@
 ```bash
 $ ./test.sh
 Запускаем виртуальные последовательные порты...
-2026/08/25 15:43:44 socat[36456] N PTY is /dev/pts/3
-2026/08/25 15:43:44 socat[36456] N PTY is /dev/pts/4
-2026/08/25 15:43:44 socat[36456] N starting data transfer loop with FDs [5,5] and [7,7]
+2026/08/25 23:34:05 socat[7622] N PTY is /dev/pts/2
+2026/08/25 23:34:05 socat[7622] N PTY is /dev/pts/5
+2026/08/25 23:34:05 socat[7622] N starting data transfer loop with FDs [5,5] and [7,7]
 Виртуальные порты созданы:
   /tmp/ttyV0
   /tmp/ttyV1
@@ -57,23 +57,28 @@ AT сервер слушает на "/tmp/ttyV0" ...
 Тест 10: AT+CPIN=abcFGH -> УСПЕШНО (ответ: OK)
 Тест 11: ABRACADBRA -> УСПЕШНО (ответ: ERROR)
 Тест 12: ATBRACADBRA -> УСПЕШНО (ответ: ERROR)
-Тест 13: AT12345B -> УСПЕШНО (ответ: OK)
-Тест 14: ATB -> УСПЕШНО (ответ: OK)
-Тест 15: ATzxB -> УСПЕШНО (ответ: OK)
+Тест 13: AT12345B -> УСПЕШНО (ответ: ERROR)
+Тест 14: ATB -> УСПЕШНО (ответ: ERROR)
+Тест 15: ATzxB -> УСПЕШНО (ответ: ERROR)
 Тест 16: ATDF1 -> УСПЕШНО (ответ: OK)
 Тест 17: ATDF12 -> УСПЕШНО (ответ: ERROR)
+Тест 18: AT+CGDCONT=1,"IP","internet" -> УСПЕШНО (ответ: OK)
+Тест 19: AT+CGACT=1,1 -> УСПЕШНО (ответ: OK)
+Тест 20: AT+CGACT=0,1 -> УСПЕШНО (ответ: OK)
+Тест 21: ATZ -> УСПЕШНО (ответ: OK)
 
 Результаты
-Всего: 17, Пройдено: 17, Провалено: 0
+Всего: 21, Пройдено: 21, Провалено: 0
 ВСЕ ТЕСТЫ ПРОЙДЕНЫ
 Завершение ./atserver
-Останавливаем процесс socat (PID 36456)...
-2026/08/25 15:44:12 socat[36456] N socat_signal(): handling signal 15
-2026/08/25 15:44:12 socat[36456] W exiting on signal 15
-2026/08/25 15:44:12 socat[36456] N socat_signal(): finishing signal 15
-2026/08/25 15:44:12 socat[36456] N exit(143)
+Останавливаем процесс socat (PID 7622)...
+2026/08/25 23:34:39 socat[7622] N socat_signal(): handling signal 15
+2026/08/25 23:34:39 socat[7622] W exiting on signal 15
+2026/08/25 23:34:39 socat[7622] N socat_signal(): finishing signal 15
+2026/08/25 23:34:39 socat[7622] N exit(143)
 Виртуальные порты удалены.
-./test.sh: строка 134: 36461 Убито              ${AT_SERVER} ${TTY_SERVER} ${DICT}
+./test.sh: строка 139:  7624 Убито              ${AT_SERVER} ${TTY_SERVER} ${DICT}
+user@mxlinux1:~/tty-at-server
 $ 
 ```
 
