@@ -140,6 +140,7 @@ int main(int argc, char* argv[]) {
     
     const char* ttyPath = argv[1];
     const char* dictPath = argv[2];
+    const char* log_path = "cmd-parser.log";
     
     // Загрузить словарь
     auto dict = loadDictionary(dictPath);
@@ -151,13 +152,19 @@ int main(int argc, char* argv[]) {
     // Открыть tty
     int fd = open(ttyPath, O_RDWR | O_NOCTTY);
     if (fd < 0) {
-        fprintf(stderr, "Не удаётся открыть \"%s\" .\n", ttyPath);
+        fprintf(stderr, "Не удаётся открыть \"%s\".\n", ttyPath);
         return 1;
     }
     
     if (!configureTTY(fd)) {
         close(fd);
         return 1;
+    }
+
+    FILE* fl = fopen(log_path, "w");
+    if (!fl) {
+        fprintf(stderr, "Не удаётся открыть \"%s\" для записи.\n", log_path);
+        exit(1);
     }
     
     // Установить обработчики сигналов
@@ -186,13 +193,21 @@ int main(int argc, char* argv[]) {
                 // Поиск совпадения в словаре
                 bool matched = false;
                 for (const auto& entry : dict) {
+                    /* проверить на соответствие команды словарю */
                     if (matchPattern(entry.first, command)) {
                         string response = entry.second;
                         // Отправить ответ + \r\n
                         write(fd, response.c_str(), response.length());
                         write(fd, "\r\n", 2);
                         matched = true;
-                        break;
+                        /* выполнить AT-команду */
+                        AtCommand command_parsed;
+                        if (parseAtCommand(command, command_parsed)) {
+                            log_command_parse(fl, command_parsed);
+                        }
+                        else {
+                            fprintf(fl, "FAIL : %s\n", command);
+                        }
                     }
                 }
                 if (!matched) {
@@ -206,7 +221,7 @@ int main(int argc, char* argv[]) {
             command.push_back(ch);
         }
     }
-    
+    fclose(fl);
     close(fd);
     fprintf(stdout, "AT сервер остановлен\n");
     return 0;

@@ -11,6 +11,8 @@
 #include <signal.h>
 #include <errno.h>
 
+#include "parser.h"
+
 /** Обработчик сигналов */
 void signal_handler(int sig);
 
