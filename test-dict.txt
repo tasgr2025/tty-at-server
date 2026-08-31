@@ -22,3 +22,4 @@ AT+CGDCONT=1,"IP","internet"=OK
 AT+CGACT=1,1=OK
 AT+CGACT=0,1=OK
 ATZ=OK
+ATgfhdddddddddddddddddddddddjsskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkhhhhhhhhhhrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrA=ERROR
