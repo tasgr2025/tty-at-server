@@ -1,3 +1,5 @@
+[![CI](https://github.com/tasgr2025/tty-at-server/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/tasgr2025/tty-at-server/actions/workflows/c-cpp.yml)
+
 # Имитатор AT-сервера
 
 ## Назначение файлов.
