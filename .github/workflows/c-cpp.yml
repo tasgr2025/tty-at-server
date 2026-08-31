@@ -1,23 +1,31 @@
-name: C/C++ CI
+name: CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ main, master ]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          chmod +x install-deps.sh
+          ./install-deps.sh
+
+      - name: Build project
+        run: |
+          make clean
+          make
+
+      - name: Run tests
+        run: |
+          chmod +x test.sh
+          ./test.sh
+
