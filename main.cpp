@@ -1,4 +1,6 @@
 #include "main.h"
+#include <iostream>
+#include <fstream>
 
 using std::vector;
 using std::string;
@@ -6,6 +8,9 @@ using std::pair;
 using std::ifstream;
 using std::endl;
 using std::cout;
+
+/** Максимальная длина входной команды (байт) */
+#define COMMAND_MAX_LENGTH 256
 
 volatile sig_atomic_t running = 1;
 
@@ -161,7 +166,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    FILE* fl = fopen(log_path, "w");
+    FILE* fl = fopen(log_path, "a");
     if (!fl) {
         fprintf(stderr, "Не удаётся открыть \"%s\" для записи.\n", log_path);
         exit(1);
@@ -193,35 +198,54 @@ int main(int argc, char* argv[]) {
             if (!command.empty()) {
                 // Поиск совпадения в словаре
                 bool matched = false;
+                AtCommand command_parsed;
+                bool parsed_ok = parseAtCommand(command, command_parsed);
+
                 for (const auto& entry : dict) {
                     /* проверить на соответствие команды словарю */
                     if (matchPattern(entry.first, command)) {
-                        string response = entry.second;
-                        /* Отправить ответ + \r\n */
-                        write(fd, response.c_str(), response.length());
-                        write(fd, "\r\n", 2);
-                        matched = true;
-                        /* выполнить AT-команду */
-                        AtCommand command_parsed;
-                        if (parseAtCommand(command, command_parsed)) {
+                        const string& response = entry.second;
+
+                        // Записать в лог до отправки ответа
+                        if (parsed_ok) {
                             log_command_parse(fl, command_parsed);
-                        }
-                        else {
+                        } else {
                             fprintf(fl, "FAIL : %s\n", command.c_str());
-                            matched = false;
                         }
                         fflush(fl);
+
+                        // Отправить ответ + \rн
+                        if (write(fd, response.c_str(), response.length()) < 0) {
+                            perror("write response");
+                        }
+                        if (write(fd, "\r\n", 2) < 0) {
+                            perror("write CRLF");
+                        }
+                        matched = true;
                         break;
                     }
                 }
                 if (!matched) {
-                    write(fd, "ERROR\r\n", 7);
+                    // Записать в лог до отправки ответа
+                    if (parsed_ok) {
+                        log_command_parse(fl, command_parsed);
+                    } else {
+                        fprintf(fl, "FAIL : %s\n", command.c_str());
+                    }
+                    if (write(fd, "ERROR\r\n", 7) < 0) {
+                        perror("write ERROR");
+                    }
                 }
                 command.clear();
             }
             /* Если был \r, а следующий символ \n - он будет прочитан отдельно,
             но command будет пуст, поэтому ничего не делаем */
         } else {
+            if ((int)command.size() >= COMMAND_MAX_LENGTH) {
+                command.clear();
+                fprintf(stderr, "Слишком длинная команда, пропущена.\n");
+                continue;
+            }
             command.push_back(ch);
         }
     }

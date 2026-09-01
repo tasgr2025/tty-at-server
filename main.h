@@ -1,15 +1,16 @@
-#include <iostream>
-#include <stdio.h>
-#include <fstream>
+#ifndef MAIN_H
+#define MAIN_H
+
 #include <string>
 #include <vector>
-#include <cstring>
-#include <functional>
+#include <utility>
+#include <cstdio>
 #include <unistd.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <signal.h>
 #include <errno.h>
+#include <functional>
 
 #include "parser.h"
 
@@ -28,3 +29,5 @@ std::vector<std::pair<std::string, std::string>> loadDictionary(const std::strin
 
 /** Настраивает последовательный порт в raw-режим */
 bool configureTTY(int fd);
+
+#endif /* MAIN_H */

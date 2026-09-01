@@ -1,9 +1,8 @@
-#include <iostream>
+#ifndef PARSER_H
+#define PARSER_H
+
 #include <string>
 #include <vector>
-#include <cctype>
-#include <algorithm>
-
 
 enum class AtCommandType {
     Basic,      /** AT, ATZ, ATE0 */
@@ -30,3 +29,5 @@ std::vector<std::string> splitParams(const std::string& s);
 bool startsWithAt(const std::string& s);
 bool parseAtCommand(const std::string& input, AtCommand& out);
 const char* typeToString(AtCommandType type);
+
+#endif /* PARSER_H */
